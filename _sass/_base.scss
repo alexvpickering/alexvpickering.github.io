@@ -171,6 +171,7 @@ code {
     font-size: 15px;
     border: 1px solid $grey-color-light;
     border-radius: 3px;
+    white-space: pre-wrap; /* force long lines to break */
 }
 
 code {
