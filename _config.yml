@@ -27,3 +27,6 @@ gems: [jekyll-paginate]
 #    permalink: /poetry/:path/
 
 exclude: [extrastuff/]
+
+disqus:
+    shortname: 'alexvpickering'
