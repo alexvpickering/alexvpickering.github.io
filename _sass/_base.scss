@@ -225,4 +225,20 @@ pre {
 }
 
 
+/**
+ * Images
+ */
+.ImageBorder /* rounded light grey border */
+{   
+    border-style: solid;
+    border-radius: 3px;
+    border-color: $grey-color-light;
+    border-width: 1px;
+}
 
+.ImageResponsive
+{   
+    width: 100%; 
+    max-width: 350px;
+    height: auto; 
+}
