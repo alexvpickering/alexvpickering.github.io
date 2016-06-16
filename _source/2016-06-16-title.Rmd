@@ -24,7 +24,7 @@ analysis (<a href="http://journals.plos.org/plosgenetics/article?id=10.1371/jour
 
 Let's look at a simulated example of what sva is capable of. For this example, the treatment group has higher expression for 300 genes (figure below - left). There is also unknown genetic variability distributed among both treatment and control groups which reduces the expression of an overlapping set of genes (figure below - middle). Using the expression data, sva discovered one surrogate variable which was regressed out of the expression data (figure below - right). Through sva, we have essentially eliminated the influence of the obscuring genetic variability. Critically, the influence of the treatment under study remains.
 
-<img src="/img/heatmapsv_1000.png" srcset="/img/heatmapsv_1000.png 1000w, /img/heatmapsv_2000.png 2000w, /img/heatmapsv_4000.png 4000w" class="ImageBorder ImageResponsive2">
+<img src="/img/heatmapsv_2000.png" srcset="/img/heatmapsv_2000.png 2000w, /img/heatmapsv_4000.png 4000w" class="ImageBorder ImageResponsive2">
 
 The simplified example above fails to clarify if sva is effective in the messy
 world of real data. To evaluate sva under more realistic conditions, I used the R package <a href="https://github.com/alexvpickering/ccmap" target="blank">ccmap</a>.
