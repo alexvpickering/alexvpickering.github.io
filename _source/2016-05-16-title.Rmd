@@ -1,7 +1,7 @@
 ---
 layout: post
 title: surrogate variable analysis
-date: 2016-05-16 15:09:00
+date: 2016-06-16 15:09:00
 description: introduction and evaluation of surrogate variable analysis
 ---
 In any given experiment there are many variables. There are one or more variables
@@ -45,5 +45,3 @@ rankings of the queried drugs amongst all other ccmap drugs (figure below - righ
 </div>
 
 The above analysis lacked in certain aspects for which sva was originally evaluated. In particular, the above analysis included only a few human clinical studies, where expression hetergeneity is potentially more common. Also, ccmap only uses the direction of differential expression when determining overlap. It is possible that sva improved the ordering of differentially expressed genes (which ccmap ignores). As such, sva may be more beneficial when individual genes need to be prioritized for downstream analysis. For this reason, I plan to keep sva as an automatic feature of crossmeta.
-
-
