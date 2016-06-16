@@ -1,7 +1,7 @@
 ---
 layout: post
 title: surrogate variable analysis
-date: 2016-06-16 15:09:00
+date: 2016-06-16
 description: introduction and evaluation of surrogate variable analysis
 ---
 In any given experiment there are many variables. There are one or more variables
