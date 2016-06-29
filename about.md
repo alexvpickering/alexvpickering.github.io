@@ -4,7 +4,9 @@ title: about
 permalink: /about/
 ---
 
-<img class="col one right" src="/img/prof_pic.jpg">
+<img class="col one right" src="/img/prof_pic_1000.jpg">
+
+
 
 <br/>
 Alex is a highly motivated bioinformatician focused on increasing the length and
