@@ -25,7 +25,7 @@ If you have an interesting project and would like to hire Alex, please get in to
 	<a href="https://ca.linkedin.com/in/alexvpickering" target="_blank"><i class="fa fa-linkedin-square"></i></a>
 </span>
 
-<div class="col three caption">
+<div class="col three caption center">
 	The best way to reach me is through email.
 </div>
 

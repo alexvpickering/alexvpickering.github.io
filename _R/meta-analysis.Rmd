@@ -99,16 +99,20 @@ gg <- ggplot(df, aes(x = query_drug, y = Overlap)) +
           plot.margin = unit(c(0.3,1,0.3,0.3), "cm"),
           axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5))
 
+m <- list(
+    l = 70,
+    b = 130
+)
     
 gg <- ggplotly(gg, tooltip = c("drug", "rank", "rel")) %>% 
-    layout(showlegend = FALSE) 
+    layout(showlegend = FALSE,
+           margin = m) 
     
     
 gg <- plotly_build(gg)
 
 # only keep hover info for queried drug and identified relationships
 gg$data[[1]]$hoverinfo <- "none"
-#gg$data[[3]]$hoverinfo <- "none"
 gg
 ```
 <div class="caption"> Query results where drug meta-analysis signatures had poor overlap with the ccmap signature for the same drug (red points). For these cases, the meta-analysis signature usually overlapped most strongly with ccmap signatures that either had a similar mechanism of action or a nearly identical chemical structure (blue points). Each point gives the overlap between a query signature and one ccmap drug signature. Overlaid is a violin plot showing the density of the overlap between each query drug and the ccmap drugs. </div>

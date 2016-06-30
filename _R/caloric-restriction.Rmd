@@ -1,0 +1,217 @@
+---
+output:
+  html_document:
+    theme: null
+    self_contained: true
+---
+
+As far as I am concerned, caloric restriction is the most worthy focus of
+biomedical research. The focus of medicine is to make us all healthier, and, whether you like it or not, being healthier will result in longer lives. As far as longer and healthier lives are concerned, caloric restriction is just about the only intervention that has a substantial impact in model organisms (figure below). There are some comparable genetic manipulations, but they cause voluntary caloric restriction. As such, it's probable that they are simply genetic means of inducing caloric restriction, and not necessarily related to the mechanisms through which caloric restriction increases lifespan.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+library(plotly)
+library(gridExtra)
+
+lifespan <- read.csv("~/Documents/Batcave/alexvpickering.github.io/_R/lifespan.csv")
+colnames(lifespan) <- c("Survival", "Age", "Diet")
+lifespan$Diet <- factor(lifespan$Diet, levels = c("AL", "25%CR", "56%CR", "65%CR"))
+
+
+ls <- ggplot(lifespan, aes_string(colnames(lifespan)[2], colnames(lifespan)[1])) +
+    geom_line(aes_string(colour = colnames(lifespan)[3],
+                         survival = colnames(lifespan)[1],
+                         age = colnames(lifespan)[2]),
+              show.legend = FALSE) +
+    scale_colour_manual(values = rev(c("#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C"))) +
+    labs(x="\nAge (months)", y= "Survival (%)") +
+    theme(panel.background = element_rect(fill = "#f8f8f8"),
+          plot.background  = element_rect(fill = "#f8f8f8", colour = "#f8f8f8"),
+          legend.background = element_rect(fill = "#f8f8f8"),
+          legend.title = element_blank(),
+          panel.grid.major = element_line(colour = "#dddddd"),
+          plot.margin = unit(c(0.3,1,0.3,0.3), "cm"))
+
+    
+ls <- ggplotly(ls, tooltip = c("colour", "age", "survival"))
+ls <- plotly_build(ls) %>% 
+    layout(showlegend = FALSE)
+
+
+
+disease <- read.csv("~/Documents/Batcave/alexvpickering.github.io/_R/disease.csv")
+colnames(disease) <- c("Incidence", "Days", "Age", "Disease", "Diet")
+
+ds <- ggplot(disease, aes_string(colnames(disease)[3], colnames(disease)[1])) +
+    geom_line(aes_string(colour = colnames(disease)[4],
+                         incidence = colnames(disease)[1],
+                         age = colnames(disease)[3],
+                         diet = colnames(disease)[5],
+                         disease = colnames(disease)[4],
+                         linetype = colnames(disease)[5]),
+              show.legend = FALSE) +
+    scale_colour_brewer(palette = "Dark2") +
+    scale_linetype_manual(values = c(1, 3)) +
+    labs(x="\nAge (days)", y= "Incidence (%)\n") +
+    theme(panel.background = element_rect(fill = "#f8f8f8"),
+          plot.background  = element_rect(fill = "#f8f8f8", colour = "#f8f8f8"),
+          legend.background = element_rect(fill = "#f8f8f8"),
+          legend.title = element_blank(),
+          panel.grid.major = element_line(colour = "#dddddd"),
+          plot.margin = unit(c(0.3,1,0.3,0.3), "cm"))
+
+    
+ds <- ggplotly(ds, tooltip = c("diet", "disease", "age", "incidence"))
+ds <- plotly_build(ds) %>% 
+    layout(showlegend = FALSE)
+
+
+p <- subplot(ls, ds, margin = 0.08)
+
+m <- list(
+    l = 70,
+    b = 70
+)
+
+p <- layout(p,
+  xaxis = list(title = "Age (months)\n"),
+  yaxis = list(title = "Survival (%)"),
+
+  xaxis2 = list(title = "Age (months)\n"),
+  yaxis2 = list(title = "Disease Incidence (%)"),
+  
+  margin = m
+)
+p
+```
+<div class="caption">
+Caloric restriction extends lifespan and delays disease incidence in rodents. The extension of mouse lifespan is proportional to the severity of caloric restriction (left, <a href="http://www.ncbi.nlm.nih.gov/pubmed/3958810" target="blank">source</a>). Caloric restriction also delays the onset of various degenerative processes in rats (right, <a href="https://www.amazon.com/Retardation-Aging-Disease-Dietary-Restriction/dp/0398054967" target="blank">source</a>)
+</div>
+
+In large part, figuring out the mechanisms through which caloric restriction increases lifespan means figuring out how gene expression changes in response to caloric restriction. Doing so was the primary reason why I created the Bioconductor package <a href="https://github.com/alexvpickering/crossmeta" target="blank">crossmeta</a>. As I have demonstrated <a href="http://alexvpickering.com/2016/06/29/meta-analysis.html" target="blank">previously</a>, the reliability of gene expression signatures are greatly improved through meta-analysis with crossmeta. In this post, I present some of the results achieved using crossmeta to perform meta-analyses of microarray data on caloric restriction and fasting.
+
+Although mechanistic insight into caloric restriction is important for understanding how caloric restriction extends lifespan, it may not be required in order to mimic caloric restriction. In order to mimic CR, it might be possible to just measure how gene expression changes with caloric restriction and then find a drug or drug combination that causes similar gene expression changes. This approach, called <a href="http://www.ncbi.nlm.nih.gov/pubmed/17008526" target="blank">Connectivity Mapping</a>, was initiated by the Broad Institute when they assayed how gene expression changes after treating multiple human cell lines with 1309 different compounds. These drug signatures, as well as predicted signatures for all two-drug combinations, can be queried using the <a href="https://github.com/alexvpickering/ccmap" target="blank">ccmap</a> Bioconductor package.
+
+In order to obtain candidate CR mimetics, a CR meta-analysis signature was queried against the ccmap data (figure below). Several of the highest ranking drugs have extended lifespan (e.g. <a href="http://www.ncbi.nlm.nih.gov/pubmed/3147347" target="blank">selegeline</a>, <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3282711/" target="blank">staurosporine</a>, and <a href="http://www.ncbi.nlm.nih.gov/pubmed/18631321" target="blank">aspirin</a>). Other than aspirin, none have been tested by the <a href="https://www.nia.nih.gov/research/dab/interventions-testing-program-itp" target="blank">ITP</a>, which tests treatments in genetically diverse mice across multiple institutions.
+
+In addition to finding drugs and drug combinations to mimic or reverse a gene expression signature, ccmap can also be used to determine how similar different treatments are. As an example, I performed seperate meta-analyses for short-term CR in mice, long-term CR in mice, CR in humans, and fasting in mice. These meta-analysis signatures were queried along with the ccmap drug signatures (using the meta-analysis of short-term CR in mice as a query signature). The results demonstrate that long-term CR, CR in humans, and fasting cause gene expression changes that are more similar to short-term CR in mice than any of 1309 different compounds (figure below). These data support the evidence that CR will increase the length and health of human life.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+library(stringr)
+library(ccdata)
+library(ccmap)
+library(data.table)
+
+setwd("~/Documents/Batcave/GEO/1-meta")
+
+# load results
+results <- c("cr_res.rds", "cr_long_res.rds", "cr_human_res.rds", "fast_res.rds")
+
+paths <- list.files(pattern = paste(results, collapse = "|"), full.names = TRUE, 
+                    recursive = TRUE)
+
+names(paths) <- c("CR in humans", "CR long-term", "CR short-term", "Fasting")
+results <- lapply(paths, function(path) {readRDS(path)$meta})
+
+# merge non-cr results with ccmap data
+data(cmap_es)
+results[["cmap_es"]] <- cmap_es
+cr <- results$`CR short-term`
+results$`CR short-term` <- NULL
+
+# merge with top combo_es data
+top_combos <- c("acetylsalicylic acid + folic acid", 
+                "staurosporine + cytisine",
+                "staurosporine + canadine")
+
+combo_es <- readRDS("CR/combo_es.rds")
+combo_es <- combo_es[, top_combos]
+results[["combo_es"]] <- combo_es
+
+results <- mapply(function(x, test) {
+    x <- as.data.frame(x)
+    if (test != "cmap_es" & test != "combo_es")
+        colnames(x) <- test
+    x <- data.table(x, keep.rownames = TRUE)
+    setkey(x, "rn")
+    x
+}, results, names(results))
+
+# format results to use as data for ccmap
+results <- Reduce(merge, results)
+results <- as.data.frame(results)
+row.names(results) <- results$rn
+results$rn <- NULL
+results <- as.matrix(results)
+
+
+# perform query against results with cr signature
+top_cr <- query_drugs(cr, results)
+
+
+setup_df <- function(top_drugs, special, tag, query_drug) {
+    
+    df <- as.data.frame(round(top_drugs, 4))
+    colnames(df) <- "Overlap"
+    df$Treatment <- row.names(df)
+    df$Rank <- 1:nrow(df)
+    
+    df$Relationship <- "na"
+    df[special, "Relationship"] <- tag
+    
+    df$query_drug <- query_drug
+    return(df)
+}
+
+# setup data.frame for ggplot2
+special <- c("CR long-term", "CR in humans", "Fasting", top_combos)
+top_20 <- names(top_cr[1:20])
+top_20 <- top_20[!top_20 %in% special]
+special <- c(special, top_20)
+
+tag <- c(rep("less calories", 3), rep("drug combination", 3), rep("top 20", 14))
+
+df <- setup_df(top_cr, special, tag, "CR short-term")
+df$Relationship <- as.factor(df$Relationship)
+
+# create plot
+gg <- ggplot(df, aes(x = query_drug, y = Overlap)) +
+    geom_jitter(aes(treatment = Treatment,
+                    overlap = Overlap,
+                    rel = Relationship,
+                    rank = Rank,
+                    alpha = Relationship,
+                    colour = Relationship), 
+                width = 1, show.legend = FALSE) +
+    scale_alpha_manual(values = c(1, 1, 0.3, 1)) +
+    scale_colour_manual(values=c("#7570B3", "#D95F02", "black", "#1B9E77")) +
+    labs(x="\n", y= "Overlap") +
+    scale_x_discrete(breaks = NULL) +
+    theme(panel.background = element_rect(fill = "#f8f8f8"),
+          plot.background  = element_rect(fill = "#f8f8f8", colour = "#f8f8f8"),
+          legend.background = element_rect(fill = "#f8f8f8"),
+          panel.grid.major = element_line(colour = "#dddddd"),
+          plot.margin = unit(c(0.3,1,0.3,0.3), "cm"))
+
+m <- list(l = 70)
+
+gg <- ggplotly(gg, tooltip = c("treatment", "overlap", "rank", "rel")) %>% 
+    layout(showlegend = FALSE, margin = m) 
+
+gg <- plotly_build(gg)
+
+# add more decimal places
+for (i in 1:length(gg$data)) {
+    t <- gg$data[[i]]$text
+    y <- gg$data[[i]]$y
+    for(j in seq_along(y)) {
+        t[j] <- gsub("Overlap: 0.\\d+", paste("Overlap:", round(y[j], 3)), t[j])
+    }
+    gg$data[[i]]$text <- t
+}
+
+gg
+setwd("~/Documents/Batcave/alexvpickering.github.io")
+```
+<div class="caption">
+A meta-analysis signature of microarray data from short term CR in mice overlaps strongly with meta-analysis signatures from long term CR, CR in humans, and fasting (orange points). The ccmap drugs (green points) and predicted drug combinations (purple points) that most strongly overlap with short term CR are also highlighted.
+</div>
