@@ -2,3 +2,7 @@ _site
 .sass-cache
 .DS_store
 .Rproj.user
+extrastuff
+_R
+_source
+.Rhistory
