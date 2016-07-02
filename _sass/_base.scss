@@ -18,7 +18,7 @@ $vertical-spacing-unit:         40px;
 $nav-height:                    56px;
 
 /* portfolio tinkering */
-$img_spacing: 5px; 
+$img_spacing: 5px;
 $img_height: 275px;
 $caption_font_size: 12px;
 $caption_color: #aaa;
@@ -128,7 +128,7 @@ a {
     text-decoration: none;
     /*
     &:visited {
-        color: darken($brand-color, 15%); 
+        color: darken($brand-color, 15%);
     }
     */
     &:hover {
@@ -200,7 +200,7 @@ samp {
 
 /**
  * Wrapper
- */ 
+ */
 
 .wrapper {
     max-width: -webkit-calc(800px - (#{$horizontal-spacing-unit} * 2));
@@ -237,7 +237,7 @@ samp {
  * Images
  */
 .ImageBorder /* rounded light grey border */
-{   
+{
     border-style: solid;
     border-radius: 3px;
     border-color: $grey-color-light;
@@ -245,14 +245,14 @@ samp {
 }
 
 .ImageResponsive
-{   
-    width: 100%; 
+{
+    width: 100%;
     max-width: 350px;
-    height: auto; 
+    height: auto;
 }
 
 .ImageResponsive2
-{   
+{
     max-height: 350px;
-    width: 100%; 
+    width: 100%;
 }
