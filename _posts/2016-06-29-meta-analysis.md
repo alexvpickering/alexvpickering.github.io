@@ -1,8 +1,8 @@
 ---
 layout: post
-title: microarray meta-analysis
+title: Microarray Meta-Analysis
 date: 2016-06-29
-description: evaluation of crossmeta
+description: Improve the reliability of microarray data through meta-analysis with crossmeta.
 ---
 
 {% include htmlwidgets/meta-analysis.html %}

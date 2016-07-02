@@ -1,8 +1,8 @@
 ---
 layout: post
-title: surrogate variable analysis
+title: Surrogate Variable Analysis
 date: 2016-06-16
-description: introduction and evaluation of surrogate variable analysis
+description: Using data to discover and account for unknown sources of variation.
 ---
 
 {% include htmlwidgets/surrogate-variable-analysis.html %}
