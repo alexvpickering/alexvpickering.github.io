@@ -236,13 +236,6 @@ samp {
 /**
  * Images
  */
-.ImageBorder /* rounded light grey border */
-{
-    border-style: solid;
-    border-radius: 3px;
-    border-color: $grey-color-light;
-    border-width: 1px;
-}
 
 .ImageResponsive
 {
@@ -253,17 +246,24 @@ samp {
 
 .ImageResponsive2
 {
-    max-height: 350px;
-    width: 100%;
+    max-width: 100%;
 }
 
-.html-widget
+.ImageBorder /* rounded light grey border */
 {
     border-style: solid;
     border-radius: 3px;
     border-color: $grey-color-light;
     border-width: 1px;
+}
 
-    max-height: 350px;
-    width: 100%;
+
+.html-widget
+{
+    @media (min-width: 414px) { max-height: 350px; }
+    @media (max-width: 414px) { max-height: 232px; }
+    border-style: solid;
+    border-radius: 3px;
+    border-color: $grey-color-light;
+    border-width: 1px;
 }
