@@ -18,5 +18,9 @@ layout: default
 
 <br>
 <br>
+<!-- htmlwidgets dependencies -->
+{% assign dep_file = page.url | split: '/' | last | prepend : 'htmlwidgets/' %}
+{% include {{dep_file}} %}
+
 {% include share-buttons.html %}
 {% include disqus.html %}
