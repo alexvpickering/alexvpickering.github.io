@@ -4,7 +4,8 @@
 
 <meta property="og:url" content="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
 
-<meta property="og:image" content="{% if page.thumbnail %}{{ page.thumbnail | prepend: site.baseurl | prepend: site.url }}{% else %}{{ {{baseurl}}/avatar | prepend: site.baseurl | prepend: site.url }}{% endif %}">
+<meta property="og:image" content="{% if page.fb_image %}{{ page.fb_image | prepend: site.baseurl | prepend: site.url }}{% endif %}">
+<meta property="og:image" content="{% if page.in_image %}{{ page.in_image | prepend: site.baseurl | prepend: site.url }}{% endif %}">
 
 <meta property="og:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% endif %}">
 
@@ -22,3 +23,26 @@
 
 <meta property="fb:admins" content="{{ site.fb_admins }}">
 <meta property="fb:app_id" content="{{ site.fb_appid }}">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@alexvpickering">
+<meta name="twitter:creator" content="@alexvpickering">
+{% if page.title %}
+  <meta name="twitter:title" content="{{ page.title }}">
+{% else %}
+  <meta name="twitter:title" content="{{ site.title }}">
+{% endif %}
+{% if page.url %}
+  <meta name="twitter:url" content="{{ site.url }}{{ page.url }}">
+{% endif %}
+{% if page.description %}
+  <meta name="twitter:description" content="{{ page.description }}">
+{% else %}
+  <meta name="twitter:description" content="{{ site.description }}">
+{% endif %}
+{% if page.tw_image %}
+  <meta name="twitter:image:src" content="{{ page.tw_image | prepend: site.baseurl | prepend: site.url }}">
+{% else %}
+  <meta name="twitter:image:src" content="http://alexvpickering.com/img/prof_pic_1000.jpg">
+{% endif %}
