@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Surrogate Variable Analysis
-date: 2016-05-28
+date: 2016-05-29
 description: Using data to discover and account for unknown sources of variation.
 ogimage: "/img/sva_thumb.png"
 ---
