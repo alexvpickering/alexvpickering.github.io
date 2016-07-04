@@ -262,6 +262,7 @@ samp {
 {
     @media (min-width: 414px) { max-height: 396px; }
     @media (max-width: 414px) { max-height: 232px; }
+    min-width: 414px;
     border-style: solid;
     border-radius: 3px;
     border-color: $grey-color-light;
