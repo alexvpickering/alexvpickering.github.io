@@ -4,11 +4,10 @@ title: about
 permalink: /about/
 ---
 
-<img class="col one right" src="/img/prof_pic_1000.jpg" style="width: 233px; max-width:100%;">
+<img class="col one right" src="/img/prof_pic_1000.jpg">
 
 
 
-<br/>
 Alex is a highly motivated bioinformatician focused on increasing the length and
 health of life. He developed and maintains the Bioconductor software packages <a href="https://github.com/alexvpickering/crossmeta" target="blank">crossmeta</a> and
 <a href="https://github.com/alexvpickering/ccmap" target="blank">ccmap</a>.
