@@ -14,7 +14,7 @@ health of life. He developed and maintains the Bioconductor software packages <a
 
 If you have an interesting project and would like to hire Alex, please get in touch.
 
-
+<br/>
 <br/>
 <hr/>
 <br/>
