@@ -17,7 +17,7 @@ variables. Instead, the unknown variables are collectively approximated with a
 set of surrogate variables. As such, the algorithm is called surrogate variable 
 analysis (<a href="http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.0030161" target="blank">sva</a>).
 
-Let's look at a simulated example of what sva is capable of. For this example, the treatment group has higher expression for 300 genes (figure below - left). There is also an unknown source of variability distributed among both treatment and control groups which reduces the expression of an overlapping set of genes (figure below - middle). Using this expression data, sva discovered one surrogate variable which was then regressed out of the expression data (figure below - right). Through sva, we have essentially eliminated the influence of the obscuring genetic variability. Critically, the influence of the treatment under study remains.
+Let's look at a simulated example of what sva is capable of. For this example, the treatment group has higher expression for 300 genes (figure below - left). There is also an unknown source of variability distributed among both treatment and control groups which reduces the expression of an overlapping set of genes (figure below - middle). Using this expression data, sva discovered one surrogate variable which was then regressed out of the expression data (figure below - right). Through sva, we have essentially eliminated the influence of the obscuring variability. Critically, the influence of the treatment under study remains.
 
 <img src="/img/heatmapsv_1400.png" class="ImageBorder ImageResponsive2" alt="heatmapsv">
 
