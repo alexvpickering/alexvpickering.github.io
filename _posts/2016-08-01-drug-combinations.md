@@ -402,6 +402,6 @@ In this post I demonstrated how I approached training a model to predict how gen
 
 
 
-<img src="/img/prediction.png" class="ImageBorder ImageResponsive2" alt="prediction">
+<img src="/img/prediction_1400.png" class="ImageBorder ImageResponsive2" alt="prediction">
 
 
