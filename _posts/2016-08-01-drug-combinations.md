@@ -68,7 +68,7 @@ def accuracy(y, yhat):
 
 # accuracy of Simple Model (78.96%)
 avg = (X[:, :11525] + X[:, 11525:]) / 2
-accuracy(avg, y)
+accuracy(y, avg)
 {% endhighlight %}
 
 Hopeless Model is much more ambitious and thinks Simple Model a bit simple. In order to predict how gene expression will change in response to a combination of two treatments, Hopeless Model looks at how the first treatment affected all 11525 genes AND how the second treatment affected all 11525 genes. By doing this, Hopeless Model thinks he can find some relationships that simple model has no chance of discovering. Unfortunately, Hopeless Model only has 257 samples and so a lot of the relationships he finds only work well on these samples. They don't apply very well to data that he hasn't observed (See <a href="http://danielnouri.org/notes/2014/12/17/using-convolutional-neural-nets-to-detect-facial-keypoints-tutorial/" target="blank">here</a> for a description of prerequisites and the various neural network parameters):
@@ -79,10 +79,9 @@ from lasagne import layers
 from nolearn.lasagne import NeuralNet, TrainSplit
 from lasagne.updates import nesterov_momentum
 from lasagne.nonlinearities import very_leaky_rectify
-from scipy.stats import spearmanr
 import theano
 
-# For Adaptive Learning Rate/Momentum --------
+# For Adaptive Learning Rate/Momentum ----
         
 def float32(k):
     return np.cast['float32'](k)
@@ -112,27 +111,27 @@ net = NeuralNet(
         ('output',  layers.DenseLayer),
         ],
     # layer parameters:
-    input_shape = (None, X.shape[1]),
-    dropout1_p = 0.85,
-    dropout2_p = 0.5,
-    hidden_num_units = 2500,
-    hidden_nonlinearity = very_leaky_rectify,
-    output_nonlinearity = None, 
-    output_num_units = y.shape[1],
+    input_shape          = (None, X.shape[1]),
+    dropout1_p           = 0.85,
+    dropout2_p           = 0.5,
+    hidden_num_units     = 2500,
+    hidden_nonlinearity  = very_leaky_rectify,
+    output_nonlinearity  = None, 
+    output_num_units     = y.shape[1],
 
     # optimization method:
-    train_split = TrainSplit(eval_size=0.2),
-    update = nesterov_momentum,
+    train_split          = TrainSplit(eval_size=0.2),
+    update               = nesterov_momentum,
     update_learning_rate = theano.shared(float32(0.01)),
-    update_momentum = theano.shared(float32(0.9)),
-    regression = True, 
-    max_epochs = 5000,
-    verbose = 1,
-    on_epoch_finished = [AdjustVariable('update_learning_rate',
-                                        start=0.01, stop=0.00001), 
-                         AdjustVariable('update_momentum',
-                                        start=0.9, stop=0.999)],
-    custom_scores = [("acc", lambda y, yhat: accuracy(y, yhat))]
+    update_momentum      = theano.shared(float32(0.9)),
+    regression           = True, 
+    max_epochs           = 5000,
+    verbose              = 1,
+    on_epoch_finished    = [AdjustVariable('update_learning_rate',
+                                           start=0.01, stop=0.00001), 
+                            AdjustVariable('update_momentum',
+                                           start=0.9, stop=0.999)],
+    custom_scores        = [("acc", lambda y, yhat: accuracy(y, yhat))]
     )
 
 np.random.seed(0)
@@ -146,14 +145,14 @@ net.fit(X, y)
 Data Augmentation
 -----------------
 <br>
-Hopeless Model, realizing his folly, figures out a clever way to improve his predictions. He reasons that the expression of each gene is affected by two separate treatments (`dA` and `dB`), and that the effect of the combined treatment should be similar irrespective of which treatment is responsible for which effect. This reasoning allows him to randomly swap `dA` and `dB` for each gene and thereby gives him access to an essentially limitless amount of training data (lines that end with `#!` indicate a change from the previous model):
+Hopeless Model, realizing his folly, figures out a clever way to improve his predictions. He reasons that the expression of each gene is affected by two separate treatments (by amounts `dA` and `dB`), and that the effect of the combined treatment should be similar irrespective of which treatment is responsible for which effect. This reasoning allows him to randomly swap `dA` and `dB` for each gene and thereby gives him access to an essentially limitless amount of training data (lines that end with `#!` indicate a change from the previous model):
 
 
 {% highlight python %}
 from nolearn.lasagne import BatchIterator
 from random import choice, sample
 
-# Class to Swap dAs and dBs ----------
+# Class to Swap dAs and dBs ----
 
 class FlipBatchIterator(BatchIterator):
 
@@ -181,7 +180,7 @@ class FlipBatchIterator(BatchIterator):
         return Xb, yb
  
         
-# Hopeless Model with Data Augmentation ----------
+# Augmented Hopeless Model ----
         
 net = NeuralNet(
     ...
@@ -211,7 +210,7 @@ To get around this, we train two separate Hopeless Models. Each sees half of the
 
 <img src="/img/stacking_2000.png" class="ImageBorder ImageResponsive" alt="stacking">
 
-For our purposes, Hopeless Model's predictions will be stacked with a gradient boosted random forest. Hopeless model will make his predictions (figure below on left - transparent purple circles) and then pass them to the random forest (figure below - right). Each sample provided to the random forest will contain the information for only a single gene from one study. For each sample, the random forest will have access to the effect of the two individual treatments (both effect sizes - solid red and blue circles, and variances - feathered red and blue circles) as well as Hopeless Model's prediction (note that `xgboost` doesn't mind missing data so we don't need to infer the missing variances).
+For our purposes, Hopeless Model's predictions will be stacked with a gradient boosted random forest. Hopeless model will make his predictions (figure below on left - transparent purple circles) and then pass them to the random forest (figure below on right). Each sample provided to the random forest will contain the information for only a single gene from one study. For each sample, the random forest will have access to Hopeless Model's prediction and to the effect of the two individual treatments (both effect sizes - solid red and blue circles, and variances - feathered red and blue circles). Note that `xgboost` doesn't mind missing data so we don't need to infer the missing variances.
 
 
 <img src="/img/nnet_1400.png" class="ImageBorder ImageResponsive2" alt="nnet">
@@ -228,7 +227,7 @@ y1 = y[:128]
 y2 = y[128:]
 
         
-# Hopeless Model 1 ----------
+# Hopeless Model 1 ----
         
 net1 = NeuralNet(
     ...
@@ -244,7 +243,7 @@ net1.fit(X1, y1)
 y2_preds = net1.predict(X2)
 
 
-# Hopeless Model 2 ----------
+# Hopeless Model 2 ----
         
 net2 = NeuralNet(
     ...
@@ -257,7 +256,7 @@ net2.fit(X2, y2)
 y1_preds = net2.predict(X1)
 {% endhighlight %}
 
-Let's now reshape the training data and predictions for the stacker. We will also reapply the same shuffling to our variances and add them to the training data for our stacker
+Before training the random forest stacker, we first need to reshape the training data and Hopeless Model's predictions. We will also reapply the same shuffling and reshaping to our variances and add them to the training data for our stacker:
 
 
 {% highlight python %}
@@ -288,7 +287,7 @@ Pirates Love R
 <br>
 What is a pirates favorite programming language? <b>R</b>rrrrrrrr!
 
-One of the few things I prefer Python for is its neural network packages. As such, I am going to perform the stacking in R. Also, the final model is implemented in R (as part of the <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a> package) so I had to transfer over the trained neural networks from Python to R. Thankfully this is relatively straightforward. To do this for `net1`:
+One of the few things I prefer Python for is its neural network modules. As such, I am going to perform the stacking in R. Also, the final model is implemented in R (as part of the <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a> package) so I had to transfer over the trained neural networks from Python to R. Thankfully this is relatively straightforward. To do this for `net1`, first extract and save the weights in Python:
 
 
 {% highlight python %}
@@ -308,7 +307,7 @@ pd.DataFrame(b1).to_csv("b1.csv", header=False, index=False)
 pd.DataFrame(b2).to_csv("b2.csv", header=False, index=False)
 {% endhighlight %}
 
-We can now go over to R, and load in our parameters:
+Then load the parameters in R:
 
 
 {% highlight r %}
@@ -386,19 +385,22 @@ xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear",
 # +both |  80.17   | -140
 {% endhighlight %}
 
-One informative way to analyse our models is to look at how well they do as a function of the effect size of the combination treatment (figure below). Both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. In contrast, both models are almost perfect for predictions at high absolute effect sizes. It's only for intermediate effect sizes that the stacker model has the advantage.
+One informative way to analyse our models is to look at how well they do as a function of the absolute effect size of the combination treatment (figure below). Both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. In contrast, both models are almost perfect for predictions at high absolute effect sizes. It's only for intermediate effect sizes that the stacker model has the advantage.
 
 <img src="/img/accuracy_1400.png" class="ImageBorder ImageResponsive2" alt="accuracy">
+
+Another informative way to analyse our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). From this perspective, we can see that a small number of treatments were either almost perfectly predicted (very low error rate) or seemingly at random (error rate near 50%).
+
+In addition to considering the accuracy of classifying a gene as up or down regulated, it is also relevant to consider the spearman correlation between the predicted and actual expression values within each treatment (figure below on right). The spearman correlation is the correlation between ranks and thus provides a measure of how well a model did at ordering genes from the most down-regulated to the most up-regulated. Again, both models did quite well, with a slight advantage to the machine learning model.
+
+<img src="/img/prediction_1400.png" class="ImageBorder ImageResponsive2" alt="prediction">
 
 <br>
 
 Summary
 -------
 <br>
-In this post I demonstrated how I approached training a model to predict how gene expression changes in response to a drug combination based on the measured gene expression changes after treatment with the individual drugs. As compared to a model that simply averages the effects of the two individual treatments, the final model has both a lower error rate and a higher spearman correlation between predicted and measured treatment combinations (figure below). To build this model, I employed the machine learning techniques of data augmentation and stacking. I may have also told a really bad fairy tale and made an awesome programming joke about pirates.
+In this post I demonstrated my approach to training a model to predict how gene expression changes in response to a drug combination based on the measured gene expression changes after treatment with the individual drugs. As compared to a model that simply averages the effects of the two individual treatments, the final model has both a lower error rate and a higher spearman correlation between predicted and measured treatment combinations. To build this model, I employed the machine learning techniques of data augmentation and stacking. I may have also told a really bad fairy tale and made an awesome programming joke about pirates.
 
-
-
-<img src="/img/prediction_1400.png" class="ImageBorder ImageResponsive2" alt="prediction">
 
 
