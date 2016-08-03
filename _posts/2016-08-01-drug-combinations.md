@@ -101,7 +101,7 @@ class AdjustVariable(object):
         getattr(nn, self.name).set_value(new_value)
         
 
-# Baseline Hopeless Model ---------
+# Hopeless Model ----
         
 net = NeuralNet(
     layers=[
