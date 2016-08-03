@@ -396,7 +396,7 @@ One informative way to analyse our models is to look at how well they do as a fu
 
 Another informative way to evaluate our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). Interestingly, this perspective reveals that a small number of treatment combinations were either almost perfectly predicted (very low error rate) or predicted seemingly at random (error rate near 50%).
 
-In addition to considering the accuracy of classifying a gene as up- or down-regulated, it is also relevant to consider if genes were accurately ordered. The correlation between ranks (spearman correlation) provides this measure of how well a model did at ordering genes from the most down-regulated to the most up-regulated. Again, both models did quite well, with a slight advantage to the machine learning model (figure below on right).
+In addition to considering the accuracy of classifying a gene as down- or up-regulated, it is also relevant to consider if genes were accurately ordered from the most down-regulated to the most up-regulated. The correlation between ranks, or spearman correlation, provides just this measure. Again, both models did quite well, with a slight advantage to the machine learning model (figure below on right).
 
 <img src="/img/prediction_1400.png" class="ImageBorder ImageResponsive2" alt="prediction">
 
