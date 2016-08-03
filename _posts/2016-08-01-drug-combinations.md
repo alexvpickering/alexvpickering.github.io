@@ -186,7 +186,7 @@ class FlipBatchIterator(BatchIterator):
 net = NeuralNet(
     ...
     # optimization method:
-    batch_iterator_train = FlipBatchIterator(batch_size=70),#!
+    batch_iterator_train = FlipBatchIterator(batch_size=70), #!
     ...
     )
 
@@ -233,7 +233,7 @@ y2 = y[128:]
 net1 = NeuralNet(
     ...
     # optimization method:
-    train_split = TrainSplit(eval_size=0.0),#!
+    train_split = TrainSplit(eval_size=0.0), #!
     ...
     )
 
@@ -268,8 +268,10 @@ Xv = np.load('Xv.npy')[ids]
 preds = reshape(np.vstack((y1_preds, y2_preds)), -1, 'A')
 
 # stack samples on top of each other with dA and dB for each gene side by side
-X  = np.transpose(np.vstack((reshape(X[:,:11525],  -1, 'A'), reshape(X[:,11525:],  -1, 'A'))))
-Xv = np.transpose(np.vstack((reshape(Xv[:,:11525], -1, 'A'), reshape(Xv[:,11525:], -1, 'A'))))
+X  = np.transpose(np.vstack((reshape(X[:,:11525],  -1, 'A'),
+                             reshape(X[:,11525:],  -1, 'A'))))
+Xv = np.transpose(np.vstack((reshape(Xv[:,:11525], -1, 'A'), 
+                             reshape(Xv[:,11525:], -1, 'A'))))
 y  = np.reshape(y,  -1, 'A')
 
 # concatenate preds, X, Xv, and y
@@ -345,7 +347,8 @@ library(data.table)
 
 # load data to train stacker on
 train <- fread("train.csv")
-names(train) <- c("net_preds","drug1_dprime", "drug2_dprime", "drug1_vardprime", "drug2_vardprime", "combo_dprime")
+names(train) <- c("net_preds","drug1_dprime", "drug2_dprime", 
+                  "drug1_vardprime", "drug2_vardprime", "combo_dprime")
 
 # seperate into X and y
 X <- train[, !"combo_dprime", with=FALSE]
@@ -365,10 +368,13 @@ dtrain <- xgb.DMatrix(data=as.matrix(X), label=y, missing = NA)
 my_etas <- list(eta = c(0.5, 0.5, rep(0.15, 6)))
 
 # cross validation
-history <- xgb.cv(data = dtrain, nround = 8, objective = "reg:linear", eta = 0.5, max.depth = 15, nfold = 5, prediction = TRUE, feval = accuracy, callbacks = my_etas)
+history <- xgb.cv(data = dtrain, nround = 8, objective = "reg:linear", 
+                  eta = 0.5, max.depth = 15, nfold = 5, prediction = TRUE,
+                  feval = accuracy, callbacks = my_etas)
 
 # final stacker
-xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear", eta=0.5, max.depth=15, callbacks = my_etas)
+xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear",
+                   eta=0.5, max.depth=15, callbacks = my_etas)
 
 
 # Model | Accuracy | Incorrect 
