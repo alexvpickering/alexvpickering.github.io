@@ -390,13 +390,13 @@ xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear",
 Evaluation
 ----------
 <br>
-One informative way to analyse our models is to look at how well they do as a function of the absolute effect size of the combination treatment (figure below). Both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. In contrast, both models are almost perfect for predictions at high absolute effect sizes. It's only for intermediate effect sizes that the stacker model has the advantage.
+One informative way to analyse our models is to look at how well they do as a function of the absolute effect size of the combination treatment (figure below). Both models make almost perfect predictions at high absolute effect sizes. In contrast, both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. These trends make sense: the smaller the effect size, the more likely it was due to chance and will not be reproducibly positive or negative. Perhaps unsurprisingly, it's only for intermediate effect sizes that the stacker model has the advantage. These cases are neither trivial to predict, such as those with large absolute effect sizes, nor virtually impossible to predict, such as those cases with effect sizes very close to zero.
 
 <img src="/img/accuracy_1400.png" class="ImageBorder ImageResponsive2" alt="accuracy">
 
-Another informative way to evaluate our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). From this perspective, we can see that a small number of treatments were either almost perfectly predicted (very low error rate) or seemingly at random (error rate near 50%).
+Another informative way to evaluate our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). Interestingly, this perspective reveals that a small number of treatment combinations were either almost perfectly predicted (very low error rate) or predicted seemingly at random (error rate near 50%).
 
-In addition to considering the accuracy of classifying a gene as up or down regulated, it is also relevant to consider the spearman correlation between the predicted and actual expression values within each treatment (figure below on right). The spearman correlation is the correlation between ranks and thus provides a measure of how well a model did at ordering genes from the most down-regulated to the most up-regulated. Again, both models did quite well, with a slight advantage to the machine learning model.
+In addition to considering the accuracy of classifying a gene as up- or down-regulated, it is also relevant to consider if genes were accurately ordered. The correlation between ranks (spearman correlation) provides this measure of how well a model did at ordering genes from the most down-regulated to the most up-regulated. Again, both models did quite well, with a slight advantage to the machine learning model (figure below on right).
 
 <img src="/img/prediction_1400.png" class="ImageBorder ImageResponsive2" alt="prediction">
 
@@ -405,7 +405,7 @@ In addition to considering the accuracy of classifying a gene as up or down regu
 Summary
 -------
 <br>
-In this post I demonstrated my approach to training a model to predict how gene expression changes in response to a drug combination based on the measured gene expression changes after treatment with the individual drugs. As compared to a model that simply averages the effects of the two individual treatments, the final model has both a lower error rate and a higher spearman correlation between predicted and measured treatment combinations. To build this model, I employed the machine learning techniques of data augmentation and stacking. I may have also told a really bad fairy tale and made an awesome programming joke about pirates.
+In this post I trained a model to predict gene expression changes in response to a drug combination based on the measured gene expression changes after treatment with the individual drugs. As compared to a model that simply averages the effects of the two individual treatments, the final model is more accurate at both classifying genes as up- or down- regulated and at ordering genes from the most down-regulated to the most up-regulated. To build this model, I employed the machine learning techniques of data augmentation and stacking. I may have also told a really bad fairy tale and made an awesome programming joke about pirates.
 
 
 
