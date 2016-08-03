@@ -12,7 +12,7 @@ Introduction
 <br>
 Drug combinations can be remarkably effective medicines. For example, antiretroviral
 therapy (ART) has dramatically reduced the HIV-related mortality rate. On their own,
-the constituent drugs of ART and ineffective - HIV rapidly mutates and acquires
+the constituent drugs of ART are ineffective - HIV rapidly mutates and acquires
 resistance to them. When the constituent drugs of ART are combined, any HIV particles that acquire resistance to a single drug are eliminated by the others. Presumably, multi-drug cancer therapies will also be more effective than single drugs.
 
 One approach to finding a candidate drug or drug combination is through <a href="http://www.ncbi.nlm.nih.gov/pubmed/17008526" target="blank">Connectivity Mapping</a>. This approach measures how gene expression is changed in response to a disease and then searches for drugs that cause the opposite changes in gene expression. Drugs found in this manner are predicted to reverse the gene expression changes caused by the disease and thereby reverse the disease. This approach was taken up by the Broad Institute, when they assayed how gene expression is changed in response to 1309 different drugs.
