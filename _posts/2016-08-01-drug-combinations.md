@@ -380,9 +380,9 @@ xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear",
 #       | (%)      |(per 11525 genes)
 # ----- | -------- | ------------
 # avg   |  78.96   | 2424 
-# +vars |  79.13   | - 19
-# +nets |  79.72   | - 86 
-# +both |  80.17   | -140
+# +vars |  79.13   | 2405 ( -19)
+# +nets |  79.72   | 2338 ( -86) 
+# +both |  80.17   | 2284 (-140)
 {% endhighlight %}
 
 <br>
