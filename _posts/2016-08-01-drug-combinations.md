@@ -385,11 +385,16 @@ xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear",
 # +both |  80.17   | -140
 {% endhighlight %}
 
+<br>
+
+Evaluation
+----------
+<br>
 One informative way to analyse our models is to look at how well they do as a function of the absolute effect size of the combination treatment (figure below). Both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. In contrast, both models are almost perfect for predictions at high absolute effect sizes. It's only for intermediate effect sizes that the stacker model has the advantage.
 
 <img src="/img/accuracy_1400.png" class="ImageBorder ImageResponsive2" alt="accuracy">
 
-Another informative way to analyse our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). From this perspective, we can see that a small number of treatments were either almost perfectly predicted (very low error rate) or seemingly at random (error rate near 50%).
+Another informative way to evaluate our models is to look at the distribution of error rates across the 259 treatment combinations (figure below on left). From this perspective, we can see that a small number of treatments were either almost perfectly predicted (very low error rate) or seemingly at random (error rate near 50%).
 
 In addition to considering the accuracy of classifying a gene as up or down regulated, it is also relevant to consider the spearman correlation between the predicted and actual expression values within each treatment (figure below on right). The spearman correlation is the correlation between ranks and thus provides a measure of how well a model did at ordering genes from the most down-regulated to the most up-regulated. Again, both models did quite well, with a slight advantage to the machine learning model.
 
