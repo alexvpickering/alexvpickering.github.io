@@ -17,7 +17,7 @@ resistance to them. When the constituent drugs of ART are combined, any HIV part
 
 One approach to finding a candidate drug or drug combination is through <a href="http://www.ncbi.nlm.nih.gov/pubmed/17008526" target="blank">Connectivity Mapping</a>. This approach measures how gene expression is changed in response to a disease and then searches for drugs that cause the opposite changes in gene expression. Drugs found in this manner are predicted to reverse the gene expression changes caused by the disease and thereby reverse the disease. This approach was taken up by the Broad Institute, when they assayed how gene expression is changed in response to 1309 different drugs.
 
-This may seem like a large number of drugs in which to find candidates. However, if you also include all unique two-drug combinations of the 1309 assayed drugs - this represents a staggering 856086 potential medicines. It is currently unfeasable to assay all these combinations, but their expression profiles can be predicted. 
+This may seem like a large number of drugs in which to find candidates. However, if you also include all unique two-drug combinations of the 1309 assayed drugs - this represents a staggering 856086 potential medicines. It is currently unfeasible to assay all these combinations, but their expression profiles can be predicted. 
 
 In this post, I show you the approach that I took to predict drug combinations for my Bioconductor package <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a>. I first implement a neural network in Python followed by a gradient boosted random forest in R. Along the way, I introduce the concepts of data augmentation and stacking. You can follow along by downloading the training data from <a href="http://bit.ly/drugcombos" target="blank">here</a>.
 
@@ -26,7 +26,7 @@ In this post, I show you the approach that I took to predict drug combinations f
 Training Data
 --------------
 <br>
-The training data consists of all microarray data that I could find from GEO where single treatments and their combinations were assayed. In total, 148 studies with 257 treatment combinations were obtained. For all the studies used, only 3483 genes were common to all. As such, a seperate neural network was trained to infer any missing values (not covered here). Let's load up the data:
+The training data consists of all microarray data that I could find from GEO where single treatments and their combinations were assayed. In total, 148 studies with 257 treatment combinations were obtained. For all the studies used, only 3483 genes were common to all. As such, a separate neural network was trained to infer any missing values (not covered here). Let's load up the data:
 
 
 
@@ -112,27 +112,27 @@ net = NeuralNet(
         ('output',  layers.DenseLayer),
         ],
     # layer parameters:
-    input_shape         = (None, X.shape[1]),
-    dropout1_p          = 0.85,
-    dropout2_p          = 0.5,
-    hidden_num_units    = 2500,
+    input_shape = (None, X.shape[1]),
+    dropout1_p = 0.85,
+    dropout2_p = 0.5,
+    hidden_num_units = 2500,
     hidden_nonlinearity = very_leaky_rectify,
     output_nonlinearity = None, 
-    output_num_units    = y.shape[1],
+    output_num_units = y.shape[1],
 
     # optimization method:
-    train_split          = TrainSplit(eval_size=0.2),
-    update               = nesterov_momentum,
+    train_split = TrainSplit(eval_size=0.2),
+    update = nesterov_momentum,
     update_learning_rate = theano.shared(float32(0.01)),
-    update_momentum      = theano.shared(float32(0.9)),
-    regression           = True, 
-    max_epochs           = 5000,
-    verbose              = 1,
-    on_epoch_finished    = [AdjustVariable('update_learning_rate', 
-                                           start=0.01, stop=0.00001),
-                            AdjustVariable('update_momentum', 
-                                           start=0.9, stop=0.999)],
-    custom_scores        = [("acc", lambda y, yhat: accuracy(y, yhat))]
+    update_momentum = theano.shared(float32(0.9)),
+    regression = True, 
+    max_epochs = 5000,
+    verbose = 1,
+    on_epoch_finished = [AdjustVariable('update_learning_rate',
+                                        start=0.01, stop=0.00001), 
+                         AdjustVariable('update_momentum',
+                                        start=0.9, stop=0.999)],
+    custom_scores = [("acc", lambda y, yhat: accuracy(y, yhat))]
     )
 
 np.random.seed(0)
@@ -146,7 +146,7 @@ net.fit(X, y)
 Data Augmentation
 -----------------
 <br>
-Hopeless Model, realizing his folly, figures out a clever way to improve his predictions. He reasons that the expression of each gene is affected by two seperate treatments (`dA` and `dB`), and that the effect of the combined treatment should be similar irrespective of which treatment is responsible for which effect. This reasoning allows him to randomly swap `dA` and `dB` for each gene and thereby gives him access to an essentially limitless amount of training data (lines that end with `#!` indicate a change from the previous model):
+Hopeless Model, realizing his folly, figures out a clever way to improve his predictions. He reasons that the expression of each gene is affected by two separate treatments (`dA` and `dB`), and that the effect of the combined treatment should be similar irrespective of which treatment is responsible for which effect. This reasoning allows him to randomly swap `dA` and `dB` for each gene and thereby gives him access to an essentially limitless amount of training data (lines that end with `#!` indicate a change from the previous model):
 
 
 {% highlight python %}
@@ -201,13 +201,13 @@ net.fit(X, y)
 Stacking
 --------
 <br>
-Hopeless Model is fealing a bit down about his accuracy and seeks consolation from Simple Model. While consoling her friend, Simple Model realizes that there are certain situations when she can make a better prediction by considering both Hopeless Model's predictions AND the effect of the two individual treatments on a given gene. This news sure cheers up Hopeless Model!
+Hopeless Model is feeling a bit down about his accuracy and seeks consolation from Simple Model. While consoling her friend, Simple Model realizes that there are certain situations when she can make a better prediction by considering both Hopeless Model's predictions AND the effect of the two individual treatments on a given gene. This news sure cheers up Hopeless Model!
 
 
 
 This is a description of the machine learning approach called stacking (<a href="http://mlwave.com/kaggle-ensembling-guide/" target="blank">MLwave</a> has a fantastic guide to stacking and other variations of model ensembling). One important subtlety of stacking is that in order for Simple Model to effectively learn when Hopeless Model's predictions should be incorporated, Hopeless Model can't have been trained on the data that he is providing predictions for. If he has, Hopeless Model's predictions will seem strangely accurate and end up being weighted too heavily.
 
-To get around this, we train two seperate Hopeless Models. Each sees half of the data and then provides their predictions for the other half (figure below). By doing this, we get Hopeless Model's predictions for the entirety of the training data and ensure that those predictions are good reflections of Hopeless Model's ability.
+To get around this, we train two separate Hopeless Models. Each sees half of the data and then provides their predictions for the other half (figure below). By doing this, we get Hopeless Model's predictions for the entirety of the training data and ensure that those predictions are good reflections of Hopeless Model's ability.
 
 <img src="/img/stacking_2000.png" class="ImageBorder ImageResponsive" alt="stacking">
 
@@ -268,10 +268,8 @@ Xv = np.load('Xv.npy')[ids]
 preds = reshape(np.vstack((y1_preds, y2_preds)), -1, 'A')
 
 # stack samples on top of each other with dA and dB for each gene side by side
-X  = np.transpose(np.vstack((reshape(X[:,:11525],  -1, 'A'),
-                             reshape(X[:,11525:],  -1, 'A'))))
-Xv = np.transpose(np.vstack((reshape(Xv[:,:11525], -1, 'A'),
-                             reshape(Xv[:,11525:], -1, 'A'))))
+X  = np.transpose(np.vstack((reshape(X[:,:11525],  -1, 'A'), reshape(X[:,11525:],  -1, 'A'))))
+Xv = np.transpose(np.vstack((reshape(Xv[:,:11525], -1, 'A'), reshape(Xv[:,11525:], -1, 'A'))))
 y  = np.reshape(y,  -1, 'A')
 
 # concatenate preds, X, Xv, and y
@@ -288,7 +286,7 @@ Pirates Love R
 <br>
 What is a pirates favorite programming language? <b>R</b>rrrrrrrr!
 
-One of the few things I prefer Python for is its neural network packages. As such, I am going to perform the stacking in R. Also, the final model is implemented in R (as part of the <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a> package) so I had to transfer over the trained neural networks from Python to R. Thanfully this is relatively straightforward. To do this for `net1`:
+One of the few things I prefer Python for is its neural network packages. As such, I am going to perform the stacking in R. Also, the final model is implemented in R (as part of the <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a> package) so I had to transfer over the trained neural networks from Python to R. Thankfully this is relatively straightforward. To do this for `net1`:
 
 
 {% highlight python %}
@@ -347,10 +345,7 @@ library(data.table)
 
 # load data to train stacker on
 train <- fread("train.csv")
-names(train) <- c("net_preds",
-                  "drug1_dprime", "drug2_dprime", 
-                  "drug1_vardprime", "drug2_vardprime", 
-                  "combo_dprime")
+names(train) <- c("net_preds","drug1_dprime", "drug2_dprime", "drug1_vardprime", "drug2_vardprime", "combo_dprime")
 
 # seperate into X and y
 X <- train[, !"combo_dprime", with=FALSE]
@@ -370,23 +365,19 @@ dtrain <- xgb.DMatrix(data=as.matrix(X), label=y, missing = NA)
 my_etas <- list(eta = c(0.5, 0.5, rep(0.15, 6)))
 
 # cross validation
-history <- xgb.cv(data = dtrain, nround = 8,
-                  objective = "reg:linear", eta = 0.5,
-                  max.depth = 15, nfold = 5,
-                  prediction = TRUE, feval = accuracy, callbacks = my_etas)
+history <- xgb.cv(data = dtrain, nround = 8, objective = "reg:linear", eta = 0.5, max.depth = 15, nfold = 5, prediction = TRUE, feval = accuracy, callbacks = my_etas)
 
 # final stacker
-xgb_mod <- xgboost(data=dtrain, nround=8,
-                       objective = "reg:linear", eta=0.5,
-                       max.depth=15, callbacks = my_etas)
+xgb_mod <- xgboost(data=dtrain, nround=8, objective = "reg:linear", eta=0.5, max.depth=15, callbacks = my_etas)
 
 
-# Model | Accuracy (%) | Incorrect (genes per 11525)
-# ----- | ------------ | ---------------------------
-# avg   |  78.96       | 2424 
-# +vars |  79.13       | - 19
-# +nets |  79.72       | - 86 
-# +both |  80.17       | -140
+# Model | Accuracy | Incorrect 
+#       | (%)      |(per 11525 genes)
+# ----- | -------- | ------------
+# avg   |  78.96   | 2424 
+# +vars |  79.13   | - 19
+# +nets |  79.72   | - 86 
+# +both |  80.17   | -140
 {% endhighlight %}
 
 One informative way to analyse our models is to look at how well they do as a function of the effect size of the combination treatment (figure below). Both models struggle to decide if a gene is up or down regulated at small absolute effect sizes. In contrast, both models are almost perfect for predictions at high absolute effect sizes. It's only for intermediate effect sizes that the stacker model has the advantage.
