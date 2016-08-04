@@ -53,8 +53,6 @@ body {
     color: $text-color;
     background-color: $background-color;
     -webkit-text-size-adjust: 100%;
-    word-wrap: break-word; /* force long words to break */
-    overflow-wrap: break-word; /* newer syntax standard that replaces word-wrap */
 }
 
 
@@ -181,7 +179,7 @@ code {
 
 pre {
     padding: 8px 12px;
-    overflow-x: auto;
+    overflow-x: scroll;
 
     > code {
         border: 0;
@@ -193,7 +191,7 @@ pre {
 code,
 pre,
 samp {
-  white-space: pre-wrap; /* force long lines to break */
+  overflow-x: scroll;
 }
 
 
