@@ -1,8 +1,8 @@
 # Site settings
-title: *ap
+title: AP Bioinformatics
 email: alexvpickering@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  bioinformatics
+  Exploring gene expression data for a longer and healthier life.
 baseurl:  # the subpath of your site, e.g. /blog/
 url:  "http://alexvpickering.com"
 twitter_username: alexvpickering
@@ -16,7 +16,7 @@ highlighter: rouge
 # Pagination
 paginate: 15
 paginate_path: "/blog/page:num/"
-gems: [jekyll-paginate]
+gems: [jekyll-paginate, jekyll-seo-tag, jekyll-sitemap]
 
 
 #collections:
