@@ -2,7 +2,7 @@
 title: AP Bioinformatics - Data Science, Statistics & Programming
 email: alexvpickering@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Exploratory omics for a longer and healthier life.
+  Exploratory bioinformatics for a longer and healthier life.
 baseurl:  # the subpath of your site, e.g. /blog/
 url:  "http://alexvpickering.com"
 twitter_username: alexvpickering
