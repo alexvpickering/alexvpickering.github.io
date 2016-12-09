@@ -3,7 +3,6 @@ layout: post
 title: Transcription Profile Similarity
 date: 2016-12-8
 description: Exploring how overlap is computed in ccmap.
-ogimage: "/img/mds_thumb.png"
 ---
 
 
