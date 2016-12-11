@@ -1,8 +1,9 @@
 ---
 layout: post
-title: Transcription Profile Similarity
+title: Transcriptional Similarity
 date: 2016-12-8
-description: Exploring how overlap is computed in ccmap.
+description: Exploring how similarity is computed in ccmap.
+ogimage: "/img/sim_thumb.png"
 ---
 
 
@@ -146,9 +147,9 @@ i <- c(1, 2, 3, 4)
 j <- c(4, 3, 1, 2)
 
 # sum of rowcolCumsum matrix
-vos <- sum(x * (max(i) - i + 1) * (max(j) - j + 1))
+vus <- sum(x * (max(i) - i + 1) * (max(j) - j + 1))
 
-# all.equal(vos, sum(net_overlap))
+# all.equal(vus, sum(net_overlap))
 # [1] TRUE
 {% endhighlight %}
 
