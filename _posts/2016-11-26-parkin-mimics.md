@@ -45,9 +45,9 @@ es <- es_meta(anals, cutoff=1)
 dprimes <- get_dprimes(es)
 {% endhighlight %}
 
-The next steps use ccmap to query the ~27000 drug/perturbagen transcriptional signatures from the Connectivity Map and LINCS L1000 datasets. 
+The next steps use ccmap to query the ~230000 drug/perturbagen transcriptional signatures from the Connectivity Map and LINCS L1000 datasets. 
 
-Note: an upcomming development version of ccmap and ccdata will be required to query the L1000 dataset.
+Note: The development version of ccmap and ccdata are required to query the L1000 dataset.
 
 
 
@@ -61,12 +61,12 @@ top_l1000 <- query_drugs(dprimes$meta, 'l1000_es')
 
 head(top_cmap)
 
-# 15-delta prostaglandin J2:   0.0938  
-# co-dergocrine mesilate:      0.0917       
-# monorden:                    0.0876
-# pergolide:                   0.0848
-# anisomycin:                  0.0806
-# cinchonine:                  0.0805
+# copper sulfate:  0.296  
+# tacrine:         0.232       
+# menadione:       0.217
+# Prestwick-1080:  0.217
+# metrizamide:     0.214
+# novobiocin:      0.210
 {% endhighlight %}
 
 TADA! Potential Parkin overexpression mimics. I say _mimics_, rather than activators, because the above drugs don't necessarily activate Parkin directly. Rather, they cause transcriptional changes that are most similar to those caused by Parkin overexpression. Details, details.
