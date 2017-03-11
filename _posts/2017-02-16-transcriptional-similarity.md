@@ -3,6 +3,7 @@ layout: post
 title: Transcriptional Similarity
 date: 2017-02-15
 description: Comparing similarity metrics and L1000 data preparations.
+ogimage: "/img/cds2vslimma_1200.png"
 ---
 
 
