@@ -8,7 +8,7 @@ permalink: /about/
 
 
 
-Alex is a highly motivated computation biochemist focused on increasing the length and
+Alex is a highly motivated computational biochemist focused on increasing the length and
 health of life. He developed and maintains the Bioconductor software packages <a href="http://bioconductor.org/packages/crossmeta/" target="blank">crossmeta</a> and
 <a href="http://bioconductor.org/packages/ccmap/" target="blank">ccmap</a>.
 
